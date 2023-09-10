@@ -23,9 +23,11 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapper(MyStrategy => ());
+        #[cfg(feature = "std")]
         wait();
     }
 
+    #[cfg(feature = "std")]
     MyEasyWrapper::_new(MyStrategy).wait();
 
     // Medium case with generics.
@@ -47,6 +49,7 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapper2<T>(MyStrategy2<T> => T);
+        #[cfg(feature = "std")]
         wait();
     }
 
@@ -69,6 +72,7 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapperlt<'a>(MyStrategylt<'a> => &'a ());
+        #[cfg(feature = "std")]
         wait();
     }
 
@@ -97,6 +101,7 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapper3<'a, T: ?Sized>(MyStrategy3<'a, T> => &'a T) where T: 'a;
+        #[cfg(feature = "std")]
         wait();
     }
 }
