@@ -1,5 +1,6 @@
 [package]
 name = "event-listener-strategy"
+# Make sure to update CHANGELOG.md when the version is bumped here.
 version = "0.1.0"
 edition = "2018"
 authors = ["John Nunley <dev@notgull.net>"]
