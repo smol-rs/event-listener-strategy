@@ -464,12 +464,12 @@ impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
 
 /// A strategy that blocks the current thread until the event is signalled.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg(feature = "std")]
+#[cfg(all(feature = "std", not(target_family = "wasm")))]
 pub struct Blocking {
     _private: (),
 }
 
-#[cfg(feature = "std")]
+#[cfg(all(feature = "std", not(target_family = "wasm")))]
 impl<'evl> Strategy<'evl> for Blocking {
     type Context = ();
     type Future = Ready;
