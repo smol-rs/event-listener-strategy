@@ -295,8 +295,8 @@ pub trait EventListenerFuture {
     ///
     /// The future should only return `Pending` if `Strategy::poll` returns error. Otherwise,
     /// this function polls the future in a hot loop.
-    #[cfg(feature = "std")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
+    #[cfg(all(feature = "std", not(target_family = "wasm")))]
+    #[cfg_attr(docsrs, doc(all(feature = "std", not(target_family = "wasm"))))]
     fn wait(mut self) -> Self::Output
     where
         Self: Sized,
