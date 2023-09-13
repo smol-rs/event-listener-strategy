@@ -295,8 +295,8 @@ pub trait EventListenerFuture {
     ///
     /// The future should only return `Pending` if `Strategy::poll` returns error. Otherwise,
     /// this function polls the future in a hot loop.
-    #[cfg(feature = "std")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
+    #[cfg(all(feature = "std", not(target_family = "wasm")))]
+    #[cfg_attr(docsrs, doc(all(feature = "std", not(target_family = "wasm"))))]
     fn wait(mut self) -> Self::Output
     where
         Self: Sized,
@@ -464,12 +464,12 @@ impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
 
 /// A strategy that blocks the current thread until the event is signalled.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg(feature = "std")]
+#[cfg(all(feature = "std", not(target_family = "wasm")))]
 pub struct Blocking {
     _private: (),
 }
 
-#[cfg(feature = "std")]
+#[cfg(all(feature = "std", not(target_family = "wasm")))]
 impl<'evl> Strategy<'evl> for Blocking {
     type Context = ();
     type Future = Ready;

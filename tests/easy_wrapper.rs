@@ -1,8 +1,10 @@
 //! Testing of the `easy_wrapper!` macro.
 
+use event_listener_strategy::{easy_wrapper, EventListenerFuture, Strategy};
 use std::{marker::PhantomData, pin::Pin, task::Poll};
 
-use event_listener_strategy::{easy_wrapper, EventListenerFuture, Strategy};
+#[cfg(target_family = "wasm")]
+use wasm_bindgen_test::wasm_bindgen_test as test;
 
 #[test]
 fn easy_wrapper_generics() {
@@ -23,11 +25,11 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapper(MyStrategy => ());
-        #[cfg(feature = "std")]
+        #[cfg(all(feature = "std", not(target_family = "wasm")))]
         wait();
     }
 
-    #[cfg(feature = "std")]
+    #[cfg(all(feature = "std", not(target_family = "wasm")))]
     MyEasyWrapper::_new(MyStrategy).wait();
 
     // Medium case with generics.
@@ -49,7 +51,7 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapper2<T>(MyStrategy2<T> => T);
-        #[cfg(feature = "std")]
+        #[cfg(all(feature = "std", not(target_family = "wasm")))]
         wait();
     }
 
@@ -72,7 +74,7 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapperlt<'a>(MyStrategylt<'a> => &'a ());
-        #[cfg(feature = "std")]
+        #[cfg(all(feature = "std", not(target_family = "wasm")))]
         wait();
     }
 
@@ -101,7 +103,7 @@ fn easy_wrapper_generics() {
 
     easy_wrapper! {
         struct MyEasyWrapper3<'a, T: ?Sized>(MyStrategy3<'a, T> => &'a T) where T: 'a;
-        #[cfg(feature = "std")]
+        #[cfg(all(feature = "std", not(target_family = "wasm")))]
         wait();
     }
 }
