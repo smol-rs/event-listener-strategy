@@ -23,6 +23,9 @@ std = ["event-listener/std"]
 [dev-dependencies]
 futures-lite = "1.12.0"
 
+[target.'cfg(target_family = "wasm")'.dev-dependencies]
+wasm-bindgen-test = "0.3.37"
+
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
