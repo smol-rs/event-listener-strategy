@@ -15,7 +15,7 @@ fn easy_wrapper_generics() {
         type Output = ();
 
         fn poll_with_strategy<'a, S: Strategy<'a>>(
-            self: Pin<&'a mut Self>,
+            self: Pin<&mut Self>,
             _strategy: &mut S,
             _context: &mut S::Context,
         ) -> Poll<Self::Output> {
@@ -41,7 +41,7 @@ fn easy_wrapper_generics() {
         type Output = T;
 
         fn poll_with_strategy<'a, S: Strategy<'a>>(
-            self: Pin<&'a mut Self>,
+            self: Pin<&mut Self>,
             _strategy: &mut S,
             _context: &mut S::Context,
         ) -> Poll<Self::Output> {
@@ -64,7 +64,7 @@ fn easy_wrapper_generics() {
         type Output = &'a ();
 
         fn poll_with_strategy<'b, S: Strategy<'b>>(
-            self: Pin<&'b mut Self>,
+            self: Pin<&mut Self>,
             _strategy: &mut S,
             _context: &mut S::Context,
         ) -> Poll<Self::Output> {
@@ -93,7 +93,7 @@ fn easy_wrapper_generics() {
         type Output = &'a T;
 
         fn poll_with_strategy<'b, S: Strategy<'b>>(
-            self: Pin<&'b mut Self>,
+            self: Pin<&mut Self>,
             _strategy: &mut S,
             _context: &mut S::Context,
         ) -> Poll<Self::Output> {
