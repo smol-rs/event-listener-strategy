@@ -38,7 +38,7 @@
 //!     type Output = ();
 //!
 //!     fn poll_with_strategy<'a, S: Strategy<'a>>(
-//!         mut self: Pin<&'a mut Self>,
+//!         mut self: Pin<&mut Self>,
 //!         strategy: &mut S,
 //!         context: &mut S::Context,
 //!     ) -> Poll<Self::Output> {
@@ -220,7 +220,7 @@ macro_rules! easy_wrapper {
             }
 
             pub(crate) fn poll_with_strategy<'__strategy, __S: $crate::Strategy<'__strategy>>(
-                self: ::core::pin::Pin<&'__strategy mut Self>,
+                self: ::core::pin::Pin<&mut Self>,
                 strategy: &mut __S,
                 context: &mut __S::Context,
             ) -> ::core::task::Poll<$output> {
@@ -284,7 +284,7 @@ pub trait EventListenerFuture {
     /// This function should use the `Strategy::poll` method to poll the future, and proceed
     /// based on the result.
     fn poll_with_strategy<'a, S: Strategy<'a>>(
-        self: Pin<&'a mut Self>,
+        self: Pin<&mut Self>,
         strategy: &mut S,
         context: &mut S::Context,
     ) -> Poll<Self::Output>;
