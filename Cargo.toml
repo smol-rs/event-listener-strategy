@@ -21,7 +21,7 @@ default = ["std"]
 std = ["event-listener/std"]
 
 [dev-dependencies]
-futures-lite = "1.12.0"
+futures-lite = "2.0.0"
 
 [target.'cfg(target_family = "wasm")'.dev-dependencies]
 wasm-bindgen-test = "0.3.37"
