@@ -413,7 +413,7 @@ impl<F: EventListenerFuture + ?Sized> Future for FutureWrapper<F> {
 /// wait_on(listener.as_mut(), &mut Blocking::default()).await;
 ///
 /// // Poll the future.
-/// listener.as_mut().listen();
+/// listener.as_mut().listen(&ev);
 /// ev.notify(1);
 ///
 /// wait_on(listener.as_mut(), &mut NonBlocking::default()).await;

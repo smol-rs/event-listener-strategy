@@ -13,7 +13,7 @@ categories = ["asynchronous", "concurrency"]
 exclude = ["/.*"]
 
 [dependencies]
-event-listener = { version = "3", default-features = false }
+event-listener = { version = "4.0.0", default-features = false }
 pin-project-lite = "0.2.12"
 
 [features]
