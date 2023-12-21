@@ -464,7 +464,11 @@ impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
         event_listener: &mut Option<L>,
         context: &mut Self::Context,
     ) -> Poll<T> {
-        Pin::new(event_listener.as_mut().expect("`event_listener` should never be `None`")).poll(context)
+        let poll = Pin::new(event_listener.as_mut().expect("`event_listener` should never be `None`")).poll(context);
+        if poll.is_ready() {
+            *event_listener = None;
+        }
+        poll
     }
 }
 
