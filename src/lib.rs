@@ -72,7 +72,7 @@ use core::marker::PhantomData;
 use core::pin::Pin;
 use core::task::{Context, Poll};
 
-use event_listener::{Listener, EventListener};
+use event_listener::{EventListener, Listener};
 
 #[doc(hidden)]
 pub use pin_project_lite::pin_project;
@@ -464,7 +464,12 @@ impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
         event_listener: &mut Option<L>,
         context: &mut Self::Context,
     ) -> Poll<T> {
-        let poll = Pin::new(event_listener.as_mut().expect("`event_listener` should never be `None`")).poll(context);
+        let poll = Pin::new(
+            event_listener
+                .as_mut()
+                .expect("`event_listener` should never be `None`"),
+        )
+        .poll(context);
         if poll.is_ready() {
             *event_listener = None;
         }
@@ -496,7 +501,10 @@ impl<'evl> Strategy<'evl> for Blocking {
         event_listener: &mut Option<L>,
         _context: &mut Self::Context,
     ) -> Poll<T> {
-        let result = event_listener.take().expect("`event_listener` should never be `None`").wait();
+        let result = event_listener
+            .take()
+            .expect("`event_listener` should never be `None`")
+            .wait();
         Poll::Ready(result)
     }
 }
