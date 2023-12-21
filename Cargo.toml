@@ -13,7 +13,7 @@ categories = ["asynchronous", "concurrency"]
 exclude = ["/.*"]
 
 [dependencies]
-event-listener = { version = "4.0.0", default-features = false }
+event-listener = { version = "4.0.1", default-features = false }
 pin-project-lite = "0.2.12"
 
 [features]
@@ -29,3 +29,6 @@ wasm-bindgen-test = "0.3.37"
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
+
+[patch.crates-io]
+event-listener = { git = "https://github.com/smol-rs/event-listener", branch = "notgull/break" }
