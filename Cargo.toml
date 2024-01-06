@@ -2,7 +2,7 @@
 name = "event-listener-strategy"
 # Make sure to update CHANGELOG.md when the version is bumped here.
 version = "0.4.0"
-edition = "2018"
+edition = "2021"
 authors = ["John Nunley <dev@notgull.net>"]
 rust-version = "1.60"
 description = "Block or poll on event_listener easily"
