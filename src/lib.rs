@@ -440,7 +440,7 @@ pub trait Strategy<'a> {
 /// A strategy that uses polling to efficiently wait for an event.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct NonBlocking<'a> {
-    _marker: PhantomData<Context<'a>>,
+    _marker: PhantomData<&'a &'a mut ()>,
 }
 
 impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
@@ -507,4 +507,14 @@ impl Future for Ready {
     fn poll(self: Pin<&mut Self>, _context: &mut Context<'_>) -> Poll<Self::Output> {
         Poll::Ready(())
     }
+}
+
+#[test]
+fn send_and_sync() {
+    fn assert_send_and_sync<T: Send + Sync>() {}
+
+    assert_send_and_sync::<Blocking>();
+    assert_send_and_sync::<NonBlocking<'static>>();
+    assert_send_and_sync::<Ready>();
+    assert_send_and_sync::<FutureWrapper<()>>();
 }
