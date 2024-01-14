@@ -441,7 +441,7 @@ pub trait Strategy<'a> {
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct NonBlocking<'a> {
     /// The type `&'a &'a mut T` is invariant over `'a`, like `Context` is.
-    /// 
+    ///
     /// We used to just use `Context` here, but then `Context` became `!Send`
     /// and `!Sync`, making all of the futures that use this type `!Send` and
     /// `!Sync` as well. So we just take the lifetime invariance and none of
