@@ -512,7 +512,7 @@ impl Future for Ready {
 #[test]
 fn send_and_sync() {
     fn assert_send_and_sync<T: Send + Sync>() {}
-    
+
     #[cfg(all(feature = "std", not(target_family = "wasm")))]
     {
         assert_send_and_sync::<Blocking>();
