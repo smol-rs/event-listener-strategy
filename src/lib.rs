@@ -440,7 +440,7 @@ pub trait Strategy<'a> {
 /// A strategy that uses polling to efficiently wait for an event.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct NonBlocking<'a> {
-    /// The type `&'a &'a mut T` is invariant over `'a`, like `Context` is.
+    /// The type `&'a mut &'a T` is invariant over `'a`, like `Context` is.
     ///
     /// We used to just use `Context` here, but then `Context` became `!Send`
     /// and `!Sync`, making all of the futures that use this type `!Send` and
