@@ -446,7 +446,7 @@ pub struct NonBlocking<'a> {
     /// and `!Sync`, making all of the futures that use this type `!Send` and
     /// `!Sync` as well. So we just take the lifetime invariance and none of
     /// the downsides.
-    _marker: PhantomData<&'a &'a mut ()>,
+    _marker: PhantomData<&'a mut &'a ()>,
 }
 
 impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
