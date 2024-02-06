@@ -1,3 +1,9 @@
+# Version 0.5.0
+
+- **Breaking:** Bump `event-listener` to v5.0.0. (#12)
+- Bump MSRV to 1.60. (#14)
+- Make `NonBlocking` `Send` and `Sync`. (#15)
+
 # Version 0.4.0
 
 - **Breaking:** Bump `event-listener` to v4.0.0. (#10)
