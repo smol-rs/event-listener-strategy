@@ -27,11 +27,11 @@
 //!         event.notify(1);
 //!     });
 //!
-//!     WaitThreeSeconds { listener }
+//!     WaitThreeSeconds { listener: Some(listener) }
 //! }
 //!
 //! struct WaitThreeSeconds {
-//!     listener: Pin<Box<EventListener>>,
+//!     listener: Option<EventListener>,
 //! }
 //!
 //! impl EventListenerFuture for WaitThreeSeconds {
@@ -42,7 +42,7 @@
 //!         strategy: &mut S,
 //!         context: &mut S::Context,
 //!     ) -> Poll<Self::Output> {
-//!         strategy.poll(self.listener.as_mut(), context)
+//!         strategy.poll(&mut self.listener, context)
 //!     }
 //! }
 //!
@@ -72,7 +72,7 @@ use core::marker::PhantomData;
 use core::pin::Pin;
 use core::task::{Context, Poll};
 
-use event_listener::EventListener;
+use event_listener::{EventListener, Listener};
 
 #[doc(hidden)]
 pub use pin_project_lite::pin_project;
@@ -400,23 +400,23 @@ impl<F: EventListenerFuture + ?Sized> Future for FutureWrapper<F> {
 /// use event_listener_strategy::{EventListenerFuture, Strategy, Blocking, NonBlocking};
 /// use std::pin::Pin;
 ///
-/// async fn wait_on<'a, S: Strategy<'a>>(evl: Pin<&'a mut EventListener>, strategy: &mut S) {
+/// async fn wait_on<'a, S: Strategy<'a>>(evl: EventListener, strategy: &mut S) {
 ///     strategy.wait(evl).await;
 /// }
 ///
 /// # futures_lite::future::block_on(async {
 /// // Block on the future.
 /// let ev = Event::new();
-/// let mut listener = ev.listen();
+/// let listener = ev.listen();
 /// ev.notify(1);
 ///
-/// wait_on(listener.as_mut(), &mut Blocking::default()).await;
+/// wait_on(listener, &mut Blocking::default()).await;
 ///
 /// // Poll the future.
-/// listener.as_mut().listen(&ev);
+/// let listener = ev.listen();
 /// ev.notify(1);
 ///
-/// wait_on(listener.as_mut(), &mut NonBlocking::default()).await;
+/// wait_on(listener, &mut NonBlocking::default()).await;
 /// # });
 /// ```
 pub trait Strategy<'a> {
@@ -427,14 +427,14 @@ pub trait Strategy<'a> {
     type Future: Future + 'a;
 
     /// Poll the event listener until it is ready.
-    fn poll<T>(
+    fn poll<T, L: Listener<T> + Unpin>(
         &mut self,
-        event_listener: Pin<&mut EventListener<T>>,
+        event_listener: &mut Option<L>,
         context: &mut Self::Context,
     ) -> Poll<T>;
 
     /// Wait for the event listener to become ready.
-    fn wait(&mut self, evl: Pin<&'a mut EventListener>) -> Self::Future;
+    fn wait(&mut self, evl: EventListener) -> Self::Future;
 }
 
 /// A strategy that uses polling to efficiently wait for an event.
@@ -451,20 +451,29 @@ pub struct NonBlocking<'a> {
 
 impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
     type Context = Context<'a>;
-    type Future = Pin<&'evl mut EventListener>;
+    type Future = EventListener;
 
     #[inline]
-    fn wait(&mut self, evl: Pin<&'evl mut EventListener>) -> Self::Future {
+    fn wait(&mut self, evl: EventListener) -> Self::Future {
         evl
     }
 
     #[inline]
-    fn poll<T>(
+    fn poll<T, L: Listener<T> + Unpin>(
         &mut self,
-        event_listener: Pin<&mut EventListener<T>>,
+        event_listener: &mut Option<L>,
         context: &mut Self::Context,
     ) -> Poll<T> {
-        event_listener.poll(context)
+        let poll = Pin::new(
+            event_listener
+                .as_mut()
+                .expect("`event_listener` should never be `None`"),
+        )
+        .poll(context);
+        if poll.is_ready() {
+            *event_listener = None;
+        }
+        poll
     }
 }
 
@@ -481,18 +490,21 @@ impl<'evl> Strategy<'evl> for Blocking {
     type Future = Ready;
 
     #[inline]
-    fn wait(&mut self, evl: Pin<&'evl mut EventListener>) -> Self::Future {
+    fn wait(&mut self, evl: EventListener) -> Self::Future {
         evl.wait();
         Ready { _private: () }
     }
 
     #[inline]
-    fn poll<T>(
+    fn poll<T, L: Listener<T> + Unpin>(
         &mut self,
-        event_listener: Pin<&mut EventListener<T>>,
+        event_listener: &mut Option<L>,
         _context: &mut Self::Context,
     ) -> Poll<T> {
-        let result = event_listener.wait();
+        let result = event_listener
+            .take()
+            .expect("`event_listener` should never be `None`")
+            .wait();
         Poll::Ready(result)
     }
 }
