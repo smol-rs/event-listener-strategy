@@ -1,3 +1,7 @@
+# Version 0.5.1
+
+- Fix the `repository` field in `Cargo.toml` to point to the correct repository. (#17)
+
 # Version 0.5.0
 
 - **Breaking:** Bump `event-listener` to v5.0.0. (#12)
