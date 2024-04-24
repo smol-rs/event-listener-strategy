@@ -9,8 +9,10 @@
 //! # Examples
 //!
 //! ```
-//! use event_listener::{Event, EventListener};
-//! use event_listener_strategy::{EventListenerFuture, FutureWrapper, Strategy};
+//! use event_listener_strategy::{
+//!    event_listener::{Event, EventListener},
+//!    EventListenerFuture, FutureWrapper, Strategy
+//! };
 //!
 //! use std::pin::Pin;
 //! use std::task::Poll;
@@ -76,6 +78,9 @@ use event_listener::{EventListener, Listener};
 
 #[doc(hidden)]
 pub use pin_project_lite::pin_project;
+
+#[doc(no_inline)]
+pub use event_listener;
 
 /// A wrapper around an [`EventListenerFuture`] that can be easily exported for use.
 ///
@@ -396,8 +401,10 @@ impl<F: EventListenerFuture + ?Sized> Future for FutureWrapper<F> {
 /// # Examples
 ///
 /// ```
-/// use event_listener::{Event, EventListener};
-/// use event_listener_strategy::{EventListenerFuture, Strategy, Blocking, NonBlocking};
+/// use event_listener_strategy::{
+///    event_listener::{Event, EventListener},
+///    EventListenerFuture, Strategy, Blocking, NonBlocking
+/// };
 /// use std::pin::Pin;
 ///
 /// async fn wait_on<'a, S: Strategy<'a>>(evl: EventListener, strategy: &mut S) {
