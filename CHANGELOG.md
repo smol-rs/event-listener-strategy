@@ -1,3 +1,7 @@
+# Version 0.5.2
+
+- Re-export the `event-listener` crate. (#20)
+
 # Version 0.5.1
 
 - Fix the `repository` field in `Cargo.toml` to point to the correct repository. (#17)
