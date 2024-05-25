@@ -16,8 +16,12 @@ exclude = ["/.*"]
 event-listener = { version = "5.0.0", default-features = false }
 pin-project-lite = "0.2.12"
 
+[target.'cfg(loom)'.dependencies]
+loom = { version = "0.7", optional = true }
+
 [features]
 default = ["std"]
+loom = ["event-listener/loom", "dep:loom"]
 std = ["event-listener/std"]
 
 [dev-dependencies]
