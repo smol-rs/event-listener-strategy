@@ -18,6 +18,7 @@ pin-project-lite = "0.2.12"
 
 [features]
 default = ["std"]
+loom = ["event-listener/loom"]
 std = ["event-listener/std"]
 
 [dev-dependencies]
