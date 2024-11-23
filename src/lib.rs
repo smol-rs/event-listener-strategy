@@ -456,7 +456,7 @@ pub struct NonBlocking<'a> {
     _marker: PhantomData<&'a mut &'a ()>,
 }
 
-impl<'a, 'evl> Strategy<'evl> for NonBlocking<'a> {
+impl<'a> Strategy<'_> for NonBlocking<'a> {
     type Context = Context<'a>;
     type Future = EventListener;
 
@@ -492,7 +492,7 @@ pub struct Blocking {
 }
 
 #[cfg(all(feature = "std", not(target_family = "wasm")))]
-impl<'evl> Strategy<'evl> for Blocking {
+impl Strategy<'_> for Blocking {
     type Context = ();
     type Future = Ready;
 
