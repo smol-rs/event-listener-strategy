@@ -1,5 +1,7 @@
 //! Testing of the `easy_wrapper!` macro.
 
+#![allow(clippy::multiple_bound_locations)]
+
 use event_listener_strategy::{easy_wrapper, EventListenerFuture, Strategy};
 use std::{marker::PhantomData, pin::Pin, task::Poll};
 
