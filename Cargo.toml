@@ -1,7 +1,7 @@
 [package]
 name = "event-listener-strategy"
 # Make sure to update CHANGELOG.md when the version is bumped here.
-version = "0.5.2"
+version = "0.5.3"
 edition = "2021"
 authors = ["John Nunley <dev@notgull.net>"]
 rust-version = "1.60"

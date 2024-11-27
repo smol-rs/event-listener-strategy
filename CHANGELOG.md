@@ -1,3 +1,7 @@
+# Version 0.5.3
+
+- Add `loom` feature that exposes `event-listener`'s underlying `loom` feature. (#24)
+
 # Version 0.5.2
 
 - Re-export the `event-listener` crate. (#20)
