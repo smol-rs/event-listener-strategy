@@ -20,6 +20,7 @@ pin-project-lite = "0.2.12"
 default = ["std"]
 loom = ["event-listener/loom"]
 std = ["event-listener/std"]
+portable-atomic = ["event-listener/portable-atomic"]
 
 [dev-dependencies]
 futures-lite = "2.0.0"
