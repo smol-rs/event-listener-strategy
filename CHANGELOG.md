@@ -1,3 +1,7 @@
+# Version 0.5.4
+
+- Add `portable-atomic` feature that exposes `event-listener`'s underlying `portable-atomic` feature. (#27)
+
 # Version 0.5.3
 
 - Add `loom` feature that exposes `event-listener`'s underlying `loom` feature. (#24)
@@ -31,4 +35,3 @@
 # Version 0.1.0
 
 - Initial version
-
