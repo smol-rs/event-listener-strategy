@@ -9,6 +9,7 @@
 //! # Examples
 //!
 //! ```
+//! # #[cfg(not(target_family = "wasm"))] { // EventListenerFuture::wait is unavailable on WASM
 //! use event_listener_strategy::{
 //!    event_listener::{Event, EventListener},
 //!    EventListenerFuture, FutureWrapper, Strategy
@@ -57,6 +58,7 @@
 //!     let future = FutureWrapper::new(wait_three_seconds());
 //!     future.await;
 //! });
+//! # }
 //! ```
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -90,6 +92,7 @@ pub use event_listener;
 /// # Examples
 ///
 /// ```
+/// # #[cfg(not(target_family = "wasm"))] { // EventListenerFuture::wait is unavailable on WASM
 /// mod my_future {
 ///     use event_listener_strategy::{easy_wrapper, EventListenerFuture, Strategy};
 ///     use std::pin::Pin;
@@ -136,6 +139,7 @@ pub use event_listener;
 ///     let future = MyFutureWrapper::new();
 ///     future.await;
 /// });
+/// # }
 /// ```
 #[macro_export]
 macro_rules! easy_wrapper {
@@ -401,6 +405,7 @@ impl<F: EventListenerFuture + ?Sized> Future for FutureWrapper<F> {
 /// # Examples
 ///
 /// ```
+/// # #[cfg(not(target_family = "wasm"))] { // Blocking is unavailable on WASM
 /// use event_listener_strategy::{
 ///    event_listener::{Event, EventListener},
 ///    EventListenerFuture, Strategy, Blocking, NonBlocking
@@ -425,6 +430,7 @@ impl<F: EventListenerFuture + ?Sized> Future for FutureWrapper<F> {
 ///
 /// wait_on(listener, &mut NonBlocking::default()).await;
 /// # });
+/// # }
 /// ```
 pub trait Strategy<'a> {
     /// The context needed to poll the future.
