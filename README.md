@@ -19,7 +19,7 @@ boilerplate to be duplicated. This crate aims to reduce that boilerplate by prov
 
 # Examples
 
-```
+```rust
 use event_listener::{Event, EventListener};
 use event_listener_strategy::{EventListenerFuture, FutureWrapper, Strategy};
 
